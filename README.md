@@ -4,22 +4,24 @@ _Module 20.1 Initial Report and Exploratory Data Analysis (EDA)_
 
 _By Brad Brown_
 
-## Executive summary
+# Executive summary
 
-### Goal
+## Goal
 Using my previous research project and paper (["Helping an LLM improve its detection of TV Commercials in Sports Broadcasts"](https://bb-wg02.github.io/cal-cap/scope/CS229_Stanford_Poster_-_Brad_Brown.pdf)) as a starting point, can I improve on my initial research to achieve higher accuracy and more granular **detection of commercials within a television sports broadcast?** 
 
 The previous research project and paper was completed in March of 2024. The project had two stages. Stage 1 fed 15-second 'chunks' of text from 722 minutes of transcripts of the audio of TV sports broadcasts to ChatGPT via a python api, instructing it to categorize each chunk as a commercial or a sports broadcast. In Stage 2, those answers along with other statistics about each chunk were then used to train a logistic regression model to try to improve the accuracy of the initial predictions. 
 
-The business goal of the Cal Capstone project is to improve the prediction accuracy overall. The Capstone project will be particularly focused on improving the Stage 2 accuracy: 
+![COMM DETECT Model Process Flow](images/model_process_flow.png)
+
+ The business goal of the Cal Capstone project is to enable a better and new way to detect commercials and improve the prediction accuracy of the previous effort. The Capstone project will be particularly focused on improving the Stage 2 accuracy: 
 1) Rework stage 1 and stage 2 model processing and metrics to **predict whether each sentence is a commercial or not**
 2) **Use feature engineering** to improve accuracy and quality of the stage 2 model
 3) Use the **XGBoost model rather than logisitc regression model**
 
-See the section *'How we measure success'* below for detailed specific objectives.
+See the section *'How we measured success'* below for detailed specific objectives.
 
 
-### How to get to the goal
+## How to get to the goal
 
 1) We will understand and explore our data from stage 1 and its outputs. The outputs of stage 1 are the inputs to stage 2. Look for data quality errors and insights about potential feature engineering and prioritization hints.
 
@@ -34,7 +36,7 @@ See the section *'How we measure success'* below for detailed specific objective
 6) We will then summarize our results, draw conclusions and define next steps
 
 
-### Why it matters
+## Why it matters
 
 There are potentially millions of people that would benefit from the ability to seamless detect commercials while watching sporting events. Sporting events are very popular but commercials are the opposite - very few people desire to see them. If the transitions to and from commercials can be detected reliably, then the possibility of providing interesting content to consumers during commercials via non-TV devices is feasible. For example, short inspirational or educational snippets of video could be triggered on a consumer's phone during a commercial on TV device. Therefore, every improvement possible to make the detection reliable matters to those consumers. Current techniques use visual image and audio signal processing modeling techniques. This project represents one of the first times large language models and other ML modeling techniques on that LLM's output are used to solve the commercial detection problem. It has promise to be a more real-time practical solution or potentially be part of a more effective and efficient ensemble of modeling approach.
 
@@ -42,12 +44,12 @@ With the initial research project, F1 macro score of individual chunk prediction
 
 Therefore, **this project moves to a more granular sentence-based approach rather than a '15-second chunk' based approach.** While sentence block prediction is a more challenging task, if successful, it makes it a more useful result, especially if by using feature engineering and XGBoost, the system can produce an end result that is still 89% F1 macro score or higher.
 
-### Findings Summary
+## Findings Summary
 #### A straight forward 4% (F1 macro) overall improvement is possible in the Cal Capstone project approach. 
 
 - Most of the overall 4% improvement is due to feature engineering.
 
-#### An additional 5% improvement (total 9%) is possible in the Cal Capstone project approach but it is likely hard to achieve this in practice
+#### An additional 5% improvement (total 9%) is possible in the Cal Capstone project approach but it is likely difficult to achieve this gain in practice
 - If the training data exposes the actual ground truth category of the previous sentence and its relevant derived columns (e.g.,'Number of Sentence Since Sports Broadcast') to the current sentence prediction, then the F1 score jumps to 98% from 93%.
 - However, in a real-time system the corrected label feedback loop would not be that immediate - could not get the actual previous sentence category in under a second.
 
@@ -61,17 +63,39 @@ Therefore, **this project moves to a more granular sentence-based approach rathe
 
 
 
-![act_vs_pred_comm_streak_new_stage2.png](https://bb-wg02.github.io/cal-cap/output/act_vs_pred_comm_streak_previous_stage2.png)
+![act_vs_pred_comm_streak_new_stage2.png](/images/act_vs_pred_comm_streak_previous_stage2.png)
 
-![act_vs_pred_comm_streak_new_stage2.png](https://bb-wg02.github.io/cal-cap/output/act_vs_pred_comm_streak_new_stage2.png)
+![act_vs_pred_comm_streak_new_stage2.png](/images/act_vs_pred_comm_streak_new_stage2.png)
 
 
-#### Future Work and Development
+### Note above how the red lines more closely track the blue lines in the second chart.
 
-#### Next Steps and Recommendations
 
-#### How we measure success
-The previous project correctly relied on Confusion Matrices as well as F1, Precision, and Recall accuracy metrics to judge commercial detection effectiveness. 
+
+## Future Work and Development
+We learned that XGBoost, sentence-based analysis, and feature engineering will improve accuracy at a more helpful granular level. We also learned that if we could get actual categorization for previous sentences, the accuracy improves significantly. Therefore, the most logical directions for future work would fall into two areas: 
+1) Quantitative work to try additional models such as a **a long short-term memory model (LSTM) neural network** 
+2) Technical work to **get more real-time feedback of the actual categorization of past sentences** (during the game)
+
+Because ChatGPT and LLM capabilities are advancing so quickly, a **3rd area to explore is to use newer models of LLMs** - it's possible that Stage 1 will become so effective that there is no need for Stage 2, in particular the multi-model sound and video capabilities of LLMs.
+
+**Another 4th promising direction is to supplement the system with a retrieval augmented generation (RAG) approach** in Stage 1. A vector-database of past sentences or groups of sentences could give the LLM more context to determine that the current sentence is a commercial or not. The total population of commercials is relatively limited and advertisers repeat the same commercials, often several times in the same sports broadcast.
+
+
+## Next Steps and Recommendations
+
+The success with granular sentence-based categorization and the improvement in accuracy from feature engineering and XGBoost indicates that a more robust pilot version of the system should be created using these techniques and tested on larger data sets ASAP.
+
+As developers design the next version, they should keep an eye towards eventually creating a fast feedback loop so that the system could have the actual correct history of previous sentence categories available. But before developers implement, researchers should quickly test how much improvement can be gained,  if there is a lag of 10+ sentences before ground truth categorizations are available to the current sentence prediction. We now know that a one sentence lag is very valuable (5% accuracy boost) but the usefulness of a larger lag may decrease rapidly.
+
+If quantitative resources are available, we recommend to start a RAG based research effort. RAG may have the higest marginal return on investment (ROI) by improving Stage 1 accuracy using existing LLM technology and a vector-database of commercials.
+
+Leadership should keep a close eye on the trends of improvements in the capabilities of LLMs and consider investing in prototypes using advanced LLMs.
+
+Feature engineering gave a major boost in this research project. However, engineered features are derived from base features. In our case, the base feature is an estimate from Stage 1. Trying to extract even more accuracy from derivations on an previous sentence category estimate is likely to have a low marginal ROI. Improving Stage 1 estimates or creating a fast feedback loop to get ground truth labels of past sentences may provide a bigger impact.
+
+## How we measured success
+The previous project relied on Confusion Matrices as well as F1, Precision, and Recall accuracy metrics to judge commercial detection effectiveness. 
 > The essence of the F1 Score lies in its ability to capture the trade-off between the two critical components of a model's performance: the precision, which measures how many of the items identified as positive are actually positive, and recall, which measures how many of the actual positives the model identifies. 
 > From: [DeepGram](https://deepgram.com/ai-glossary/f1-score-machine-learning) , Feb 2024
 
@@ -81,7 +105,9 @@ The choice of F1 *Macro average* rather than F1 *Micro average* is because the d
 
 The confusion matrix is an excellent mechanism to visualize the distribution of the data into 4 intuitive boxes. We can easily see how many true positive and true negatives there are, but also see determine whether or not our misclassifications tend towards false positives or tend towards false negatives.
 
-In the Cal Capstone project, we will again use these measures, but there are changes being made to the data structures and our analysis of the business needs also inspire changes in our prediction approach: sentence-based and windowed predictions.
+For these reasons in the Cal Capstone project, we again used these measures. Note that there are changes being made to the data structures and our analysis of the business needs also inspired changes in our prediction approach: sentence-based and windowed predictions.
+
+### Questions to answer as we change the design:
 
 **Data structure change:Sentence-based:**
   
@@ -93,69 +119,206 @@ In the Cal Capstone project, we will again use these measures, but there are cha
 - Can we use feature engineering such as adding features that take the square of existing features to improve accuracy?
 - If the model can rely on past history of correct labels (rather than only the history of Stage 1 estimates), will it help it predict current sentence label better?
 
-**Lastly, but importantly, apply metrics for our results across different configurations to enable system designers to align more closely with the business goals and improve the user experience:**
  
-1) **Windowed, rolling, or 'smoothed' predictions:** Adopting 'windowed' predictions in Stage 1, means three of the same prediction in a row are needed to change the current prediction. 
-In a sentence-based model, will we experience  'flip flopping' where the incorrect categorizations of one sentence flips the user to the wrong context and then the next sentence flips them back and then the cycle repeats? If so, this cycle might be very annoying to end users. 
-Are the errors that cause a flip-flop between corect and incorrect predictions sentence by sentence worse than a consistent set of incorrect predictions that are slower to transition to the correct answer after a shift to or from commercials? 
-In essence is it better to have your errors grouped together within long chains of sentences? We will measure both ways. If each has close to the same accuracy, then the product designers can choose the experience that users prefer.
+ **Windowed, rolling, or 'smoothed' predictions:** 
 
-2) **Handling Embedded commercials:**
-Should we differentiate between 'embedded commercials' vs 'standard commercials'. For example, oftentimes a sports broadcaster will promote a product while still talking about the sporting event in the same sentence: 'Let's take a look at our Coca Cola top player of the game statistics…'. *For this project, we will NOT attempt to categorize 'embedded commercials'.*
-
-#### **In summary, the metrics we will use are F1 Macro, Recall and Precision as well as Confusion Matrices. They will be applied in mulitiple contexts.**
-#### BASELINE:
-##### -->A) Previous research baseline values
-#### Cal Capstone:
-##### -->B) Stage 1 using new sentence-based approach
-#### For XGBoost model and Logistic Regression Models:
-##### -->C) Stage 2 using new sentence-based approach WITHOUT feature engineering and WITHOUT Windowed Predictions
-##### -->D) Stage 2 using new sentence-based approach WITH feature engineering but WITHOUT Windowed Predictions
-##### -->E) Stage 2 using new sentence-based approach WITH feature engineering and WITH Windowed Predictions
-##### -->F) Stage 2 like Stage E except we make the assumption that we know the actual (ground truth) category for the previous sentence
-#####
-
-**Data Exploration and Insights**
+- Adopting 'windowed' predictions in Stage 1, means three of the same prediction in a row are needed to change the current prediction. 
+- In a sentence-based model, will we experience  'flip flopping' where the incorrect categorizations of one sentence flips the user to the wrong context and then the next sentence flips them back and then the cycle repeats? If so, this cycle might be very annoying to end users. 
+- Are the errors that cause a flip-flop between corect and incorrect predictions sentence by sentence worse than a consistent set of incorrect predictions that are slower to transition to the correct answer after a shift to or from commercials? 
 
 
-    Data insights are …
+**In summary, the metrics we used are F1 Macro, Recall and Precision as well as Confusion Matrices. They were applied in mulitiple contexts:**
 
-**Feature Engineering**
+##### BASELINE:
+- A) Previous research baseline values
+##### Cal Capstone:
+
+- B) Stage 1 using new sentence-based approach
+
+- **For XGBoost model and Logistic Regression Models:**
+
+  - C) Stage 2 using new sentence-based approach WITHOUT feature engineering and WITHOUT Windowed Predictions
+
+  - D) Stage 2 using new sentence-based approach WITH feature engineering but WITHOUT Windowed Predictions
+
+  - E) Stage 2 using new sentence-based approach WITH feature engineering and WITH Windowed Predictions
+
+  - F) Stage 2 like Stage E except we make the assumption that we know the actual (ground truth) category for the previous sentence
+
+## Data Exploration and Insights
+
+Data ultimately comes from 7+ hours of video including commercials. Here is link to one now, if you want to review a few seconds of one.
+
+#### One of 4 videos in data set: [Warriors Vs Nets NBA Basketball Video](https://lbinc.wistia.com/medias/bdyp4awihy?wtime=35m33s)
+
+As part of my project, I had the 7 hours of video transcribed to raw text files. Here is a sample of  the format. The bracket characters [] hold the time stamp relative to the start of the recording. Timestamps are in format [hour:minute:second.microsecond]. Snippet of transcript below.
+
+> **[00:35:30.286]**
+
+> Nets lead by three after one.
+
+> Shout out to formerly the starters, no dunks crew, and to Ian Eagle himself. The bird loves wedgies. A good start to this night here at Barclays. **[00:35:45.332]**
+
+>  Can't be a pop star? Mmm, doubt it.
+
+> Chauncey!
+
+> This is rough, but it's also finished.
+
+> I know what you want to do. Yeah, don't touch... Please don't touch that. **[00:36:00.149]**
+
+> Get ready, America.
+
+> Good morning, with Dulcolax.
+
+> Good, good, good morning. Yeah.
+
+> Try Dulcolax Chewy Fruit Bites for fast and gentle constipation relief in as little as 30 minutes. Making **[00:36:15.716]**
 
 
-    Features engineering process was …
+### The most central table in the project is the **llm_predictions** table. It holds the the prediction output from chatgpt API about whether the text is a commercial or sports broadcast. 
 
-**Model Development Process**
+It also holds the statistics about the text block that we use to try to improve the chatgpt prediction using other ML Modeling techniques. The most important columns are:
+- response_classification_c: Stage 1 prediction - values 0 for 'Sports Broadcast' and 1 for 'Commercial'
+- num_blocks_since_sb - Number of sentences since seen a sports broadcast
+- num_blocks_since_c - Number of block since seen a commercial
+- sb_blocks_so_far - total number of sport broadcast sentences seen so far in the game
+- c_blocks_so_far - total number of commercial sentences seen so far in the game
+- sports_broadcasting_streak - number of sports broadcast sentences seen in a row (including the given sentence of this row)
+- commercial_streak - number of commercials sentences seen in a row (including the given sentence of this row)
 
+### See the notebook [insert link] for a deeper dive into the data tables and data model and how the data was generated.
 
-    The model development process was…
+### Let's look  at the actual number of sentences that are commercials in our full data set abnd how frequently STAGE 1 predicts commercials.
 
-**Model Choice**
+![sentences_bar_chart.png](images/sentences_bar_chart.png)
 
+#### So we see that the new Stage 1 predicts 802 fewer commercial sentences than actually are in the 722 minutes of video ( 3,453 actual - 2,631 predicted).
 
-    We chose…
+#### Another and better baseline stat is the confusion matrix from stage 1. The metrics from this baseline test dataset will be used to compare to stage 2 results. 
 
-**Final Modeling Process**
-
-
-    The final modeling process was …
-
-**Outcomes**
-
-
-    Our outcome was …
-
-**Summary and Final Results**
-
-
-    In summary the goal was ... and the final result was…
-
-**Future Work**
+![cm_stage1_0_old.png](images/cm_stage1_0_old.png)
 
 
-    In the future we will…
+
+#### Let's explore the most interesting feature fields we can use for stage 2. 
+
+#### **First, let's look at the commercial_streak field:** 
+#### My theory is that commercials run in bunches of contiguous groups and thus a long string of sequential sentences that are all commercials. 
+#### I think we can use the pattern that the last X sentences were predicted to be commercials to inform the stage 2 model about whether the current text block is a commercial or not.
+### Look at this chart of the actual commercial streaks:
+
+![placeholder](images/com_streak.png)
 
 
-----
+### Yet, when we look at what Stage 1 predicted, the streaks are not consistently increasing. They rise and fall back 0 and start again multiple times inside the ground truth streaks triangles.
+
+full chart
+![act_vs_pred_comm_streak_new_stage2.png](/images/act_vs_pred_comm_streak_previous_stage2.png)
+
+### Zooming in on first 400 sentences...
+![zoomed_act_vs_pred_comm_streak_previous_stage2.png](/images/zoomed_act_vs_pred_comm_streak_previous_stage2.png)
+
+### We will aim to get the red triangles to map closely to the blue triangles
+
+# 2. Data Split Strategy
+
+### Since we are analyzing a time-series data set we won't use random splits. With time series data we need to be very careful to avoid data leakage risks. We will split by session (or game). 
+
+#### We have 4 games in our 10,000+ sentences data set and we will hold back one game (session_id=0) as the test set. The rest will be used for training. Session 0 holds 18% of the sentences.
+
+
+![game_sentences.png](images/game_sentences.png)
+
+
+# 3. Feature Engineering
+
+For a time-series based analysis it is often useful to create Lag and Rolling features. Will create several of each for the **target value llm_prediction.response_classification_c**
+
+We also create several features based on hunches, visualization observations, and subject matter expertise.
+
+Examples are: exponential decay feature, length of sentence, square and square root of blocks seen so far, etc
+
+
+![placeholder](images/after_fe.png)
+
+**We then do Feature Selection using Sequential Feature Selection (SFS) from sklearn.**
+
+**SFS "backward" selection removes features in what is called a 'greedy' algorithm. A greedy algorithm tackles problems by making the locally optimal choice at each step, hoping it leads to a globally optimal solution. In this case, at each step, the process selects the optimal feature to remove based on the cross-validation F1 score.**  
+
+**After experimentation, I decided on narrowing down to the 10 best features.**
+![after_sfs.png](images/after_sfs.png)
+
+### We checked for NaNs in our data AFTER feature engineering
+### Note that NaNs come from lag columns that we engineered because they can't get values prior to the beginning of the data sets. 
+
+**NaN check AFTER FEATURE ENGINEERING**
+- Train set Nans: 87
+- Train set Nans: 29
+- % of training rows with at least one NaN: 0.01
+- % of test rows with at least one NaN: 0.02
+
+**I Left the NaNs in the data sets because below NAN TOLERANCE level we set at 0.03 and XGBoost can handle them anyway**
+
+
+# 4. Tune The Model
+
+## Model Choice
+
+**With most optimal feature set defined, now tune the model using Grid Search CV**
+
+*Note: I used a special time series split function in cross validation to avoid data leakage*
+
+![overfit_check.png](images/overfit_check.png)
+
+### Grid Search helped us find parameters that optimize for validation sets. 
+### Charts show F1 for a range of values of a given parameter (while keeping other parameters to their best fit value). 
+### From charts, we see that we are NOT overfitting because Grid Search CV chose highest point of validation curve  near the point of divergence from training curve
+
+**At these parameters, we can see the most important features of the 10 we selected:**
+
+- *Lag_2_sports_broadcasting_llm was the most important by far:*
+
+![feat_impt.png](images/feat_impt.png)
+
+### Additional Results and Analysis
+
+The main findings are in the "Findings Summary" section of this document. Also please review "Next steps" section above.
+
+Here are some more details about the results:
+
+![cm_xgb.png](images/cm_xgb_and_lr.png)
+
+See [notebook %%%name%%% for more detail]
+
+## More information 
+
+### This notebook, related code and images are hosted on github [here](https://github.com/bb-wg02/cal-cap)
 
 *(Note: Full Github source code access to this Stanford Research Project available upon request, but to review the code, you can unzip a copy of the stanford project source code in this cal capstone github - see the 'previous_research' folder)*
+
+##### Note to grading team:
+##### This cal-cap Github is self-contained in terms of code, but I have included zip files of the original code for the Stanford project and my improvements to make Stage 1 sentence-based (See previous_research folder).
+##### I believe these code zips are above and beyond the required scope of the Cal Capstone grading rubrick. I do not plan to make these githubs public.
+##### But if you feel the cal-cap github is incomplete because its data relies on code from these other githubs, I can open it up to specific graders. Thank you!
+
+
+### Outline of project
+
+FIX THESE TO BE RELEVANT TO MY PROJECT!
+
+[Link to download data](http://localhost:8888/files/Downloads/ML%20ipynb/Capstone/SuicideDetection.csv?_xsrf=2%7C01e7821a%7C54dac168862e9a75a5e46c1d11d7822e%7C1658864864) 
+
+[Link to notebook](http://localhost:8888/lab/tree/capstone/SuicideIdeationDetection.ipynb) 
+
+[Link to download notebook](http://localhost:8888/files/capstone/SuicideIdeationDetection.ipynb?_xsrf=2%7Cd31ff0b1%7C93c2c365c2bec949e09c3632966e8050%7C1662161901)
+
+[Link to evaluation](http://localhost:8888/lab/tree/capstone/CapstoneEvaluation.ipynb)
+
+[Link to download evaluation](http://localhost:8888/files/capstone/CapstoneEvaluation.ipynb?_xsrf=2%7Cd31ff0b1%7C93c2c365c2bec949e09c3632966e8050%7C1662161901)
+
+
+### Contact and Further Information
+
+Brad Brown
+Email: bradbrownwg02@gmail.com
