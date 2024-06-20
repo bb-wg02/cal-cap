@@ -57,14 +57,13 @@ Therefore, **this project moves to a more granular sentence-based approach rathe
 #### Sentence-based Prediction is much better than 15-second chunk-based prediction
 - In Stage 1, the sentence-based approach is 5.80% more accurate. Perhaps more importantly, from a practical user experience perspective, sentence-based prediction is much better. The shorter duration(elapsed time) of a sentence means that an incorrect sentence wastes less end-user time than an error categorizing a 15-second chunk of text.
 
+![Model-Scores.png](https://bb-wg02.github.io/cal-cap/images/final_chart.png)
+
+
+
+![act_vs_pred_comm_streak_new_stage2.png](https://bb-wg02.github.io/cal-cap/output/act_vs_pred_comm_streak_previous_stage2.png)
+
 ![act_vs_pred_comm_streak_new_stage2.png](https://bb-wg02.github.io/cal-cap/output/act_vs_pred_comm_streak_new_stage2.png)
-
-
-
-
-![Model-Scores.png](https://bb-wg02.github.io/cal-cap/images/final_chart.png)
-
-![Model-Scores.png](https://bb-wg02.github.io/cal-cap/images/final_chart.png)
 
 
 #### Future Work and Development
