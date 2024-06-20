@@ -34,7 +34,7 @@ See the section *'How we measure success'* below for detailed specific objective
 6) We will then summarize our results, draw conclusions and define next steps
 
 
-### Why does it matter
+### Why it matters
 
 There are potentially millions of people that would benefit from the ability to seamless detect commercials while watching sporting events. Sporting events are very popular but commercials are the opposite - very few people desire to see them. If the transitions to and from commercials can be detected reliably, then the possibility of providing interesting content to consumers during commercials via non-TV devices is feasible. For example, short inspirational or educational snippets of video could be triggered on a consumer's phone during a commercial on TV device. Therefore, every improvement possible to make the detection reliable matters to those consumers. Current techniques use visual image and audio signal processing modeling techniques. This project represents one of the first times large language models and other ML modeling techniques on that LLM's output are used to solve the commercial detection problem. It has promise to be a more real-time practical solution or potentially be part of a more effective and efficient ensemble of modeling approach.
 
@@ -48,7 +48,7 @@ Therefore, **this project moves to a more granular sentence-based approach rathe
 - Most of the overall 4% improvement is due to feature engineering.
 
 #### An additional 5% improvement (total 9%) is possible in the Cal Capstone project approach but it is likely hard to achieve this in practice
-- If the training data exposes the actual ground truth category of the previous sentence ('ground_truth_label_c_lag_1') and its relevant derived columns (e.g.,'num_blocks_sb_lag_1_gt') to the current sentence prediction, then the F1 score jumps to 98% from 93%.
+- If the training data exposes the actual ground truth category of the previous sentence and its relevant derived columns (e.g.,'Number of Sentence Since Sports Broadcast') to the current sentence prediction, then the F1 score jumps to 98% from 93%.
 - However, in a real-time system the corrected label feedback loop would not be that immediate - could not get the actual previous sentence category in under a second.
 
 #### XGBoost vs Logistic Regression: XGB better
@@ -57,13 +57,64 @@ Therefore, **this project moves to a more granular sentence-based approach rathe
 #### Sentence-based Prediction is much better than 15-second chunk-based prediction
 - In Stage 1, the sentence-based approach is 5.80% more accurate. Perhaps more importantly, from a practical user experience perspective, sentence-based prediction is much better. The shorter duration(elapsed time) of a sentence means that an incorrect sentence wastes less end-user time than an error categorizing a 15-second chunk of text.
 
+![act_vs_pred_comm_streak_new_stage2.png](https://bb-wg02.github.io/cal-cap/images/act_vs_pred_comm_streak_new_stage2.png)
 
 
-**How to measure success**
 
 
-    We can measure success this way…
+![Model-Scores.png](https://bb-wg02.github.io/cal-cap/images/final_chart.png)
 
+![Model-Scores.png](https://bb-wg02.github.io/cal-cap/images/final_chart.png)
+
+
+#### Future Work and Development
+
+#### Next Steps and Recommendations
+
+#### How we measure success
+The previous project correctly relied on Confusion Matrices as well as F1, Precision, and Recall accuracy metrics to judge commercial detection effectiveness. 
+> The essence of the F1 Score lies in its ability to capture the trade-off between the two critical components of a model's performance: the precision, which measures how many of the items identified as positive are actually positive, and recall, which measures how many of the actual positives the model identifies. 
+> From: [DeepGram](https://deepgram.com/ai-glossary/f1-score-machine-learning) , Feb 2024
+
+The 'positive' in our case is a 'commercial detected'. This makes the F1 a useful measure for our case because our end-users want us to avoid sports broadcasts being labeled as commercials as well as not misclassify commercials as sports broadcasts. In other words, although precision is slightly more important, the recall also matters to our end-users, therefore, F1 captures these two metrics in one number. 
+
+The choice of F1 *Macro average* rather than F1 *Micro average* is because the data population is NOT particularly imbalanced: The data suggests that generally there are roughly twice the number of sports broadcasting sentences compared to commercials. Since end-users value the minority class (commercial detection) somewhat more, a macro-averaged measure is more appropriate (Micro average works well with heavily imbalanced data sets).
+
+The confusion matrix is an excellent mechanism to visualize the distribution of the data into 4 intuitive boxes. We can easily see how many true positive and true negatives there are, but also see determine whether or not our misclassifications tend towards false positives or tend towards false negatives.
+
+In the Cal Capstone project, we will again use these measures, but there are changes being made to the data structures and our analysis of the business needs also inspire changes in our prediction approach: sentence-based and windowed predictions.
+
+**Data structure change:Sentence-based:**
+  
+- If the project de-emphasized the contiguous 15-second chunks of text and instead relied on single sentences, would the Stage 1 CM and F1 accuracy worsen, stay the same, or improve?
+
+**Stage 2 modeling changes: XGBoost and feature engineering:**
+  
+- Can we train an XGBoost Decision Tree model on the LLM answers and metadata about each sentence to improve the accuracy more than the previous use of a Logistic Regression model?
+- Can we use feature engineering such as adding features that take the square of existing features to improve accuracy?
+- If the model can rely on past history of correct labels (rather than only the history of Stage 1 estimates), will it help it predict current sentence label better?
+
+**Lastly, but importantly, apply metrics for our results across different configurations to enable system designers to align more closely with the business goals and improve the user experience:**
+ 
+1) **Windowed, rolling, or 'smoothed' predictions:** Adopting 'windowed' predictions in Stage 1, means three of the same prediction in a row are needed to change the current prediction. 
+In a sentence-based model, will we experience  'flip flopping' where the incorrect categorizations of one sentence flips the user to the wrong context and then the next sentence flips them back and then the cycle repeats? If so, this cycle might be very annoying to end users. 
+Are the errors that cause a flip-flop between corect and incorrect predictions sentence by sentence worse than a consistent set of incorrect predictions that are slower to transition to the correct answer after a shift to or from commercials? 
+In essence is it better to have your errors grouped together within long chains of sentences? We will measure both ways. If each has close to the same accuracy, then the product designers can choose the experience that users prefer.
+
+2) **Handling Embedded commercials:**
+Should we differentiate between 'embedded commercials' vs 'standard commercials'. For example, oftentimes a sports broadcaster will promote a product while still talking about the sporting event in the same sentence: 'Let's take a look at our Coca Cola top player of the game statistics…'. *For this project, we will NOT attempt to categorize 'embedded commercials'.*
+
+#### **In summary, the metrics we will use are F1 Macro, Recall and Precision as well as Confusion Matrices. They will be applied in mulitiple contexts.**
+#### BASELINE:
+##### -->A) Previous research baseline values
+#### Cal Capstone:
+##### -->B) Stage 1 using new sentence-based approach
+#### For XGBoost model and Logistic Regression Models:
+##### -->C) Stage 2 using new sentence-based approach WITHOUT feature engineering and WITHOUT Windowed Predictions
+##### -->D) Stage 2 using new sentence-based approach WITH feature engineering but WITHOUT Windowed Predictions
+##### -->E) Stage 2 using new sentence-based approach WITH feature engineering and WITH Windowed Predictions
+##### -->F) Stage 2 like Stage E except we make the assumption that we know the actual (ground truth) category for the previous sentence
+#####
 
 **Data Exploration and Insights**
 
