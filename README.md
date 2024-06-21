@@ -75,16 +75,16 @@ Therefore, **this project moves to a more granular sentence-based approach rathe
 ## Future Work and Development
 We learned that XGBoost, sentence-based analysis, and feature engineering will improve accuracy at a more helpful granular level. We also learned that if we could get actual categorization for previous sentences, the accuracy improves significantly. Therefore, the most logical directions for future work would fall into two areas: 
 1) Quantitative work to try additional models such as a **a long short-term memory model (LSTM) neural network** 
-2) Technical work to **get more real-time feedback of the actual categorization of past sentences** (during the game)
+2) Technical and business process design work to **get more real-time feedback of the actual categorization of past sentences** (during the game)
 
-Because ChatGPT and LLM capabilities are advancing so quickly, a **3rd area to explore is to use newer models of LLMs** - it's possible that Stage 1 will become so effective that there is no need for Stage 2, in particular the multi-model sound and video capabilities of LLMs.
+Because ChatGPT and LLM capabilities are advancing so quickly, a **3rd area to explore is to use newer models of LLMs** - it's possible that Stage 1 will become so effective that there is no need for Stage 2, in particular the trends around sound and video capabilities of LLMs may greatly improve Stage 1.
 
 **Another 4th promising direction is to supplement the system with a retrieval augmented generation (RAG) approach** in Stage 1. A vector-database of past sentences or groups of sentences could give the LLM more context to determine that the current sentence is a commercial or not. The total population of commercials is relatively limited and advertisers repeat the same commercials, often several times in the same sports broadcast.
 
 
 ## Next Steps and Recommendations
 
-The success with granular sentence-based categorization and the improvement in accuracy from feature engineering and XGBoost indicates that a more robust pilot version of the system should be created using these techniques and tested on larger data sets ASAP.
+The success with granular sentence-based categorization and the improvement in accuracy from feature engineering and XGBoost indicates that a more robust pilot version of the system should be created using these techniques and tested on larger data sets ASAP (We also may want to reduce the number of features used for interpretablity).
 
 As developers design the next version, they should keep an eye towards eventually creating a fast feedback loop so that the system could have the actual correct history of previous sentence categories available. But before developers implement, researchers should quickly test how much improvement can be gained,  if there is a lag of 10+ sentences before ground truth categorizations are available to the current sentence prediction. We now know that a one sentence lag is very valuable (5% accuracy boost) but the usefulness of a larger lag may decrease rapidly.
 
@@ -109,7 +109,7 @@ For these reasons in the Cal Capstone project, we again used these measures. Not
 
 ### Questions to answer as we change the design:
 
-**Data structure change:Sentence-based:**
+**Data structure change: Sentence-based:**
   
 - If the project de-emphasized the contiguous 15-second chunks of text and instead relied on single sentences, would the Stage 1 CM and F1 accuracy worsen, stay the same, or improve?
 
@@ -189,13 +189,13 @@ It also holds the statistics about the text block that we use to try to improve 
 
 ### See the notebook [insert link] for a deeper dive into the data tables and data model and how the data was generated.
 
-### Let's look  at the actual number of sentences that are commercials in our full data set abnd how frequently STAGE 1 predicts commercials.
+### Let's look  at the actual number of sentences that are commercials in our full data set and how frequently STAGE 1 predicts commercials.
 
 ![sentences_bar_chart.png](images/sentences_bar_chart.png)
 
-#### So we see that the new Stage 1 predicts 802 fewer commercial sentences than actually are in the 722 minutes of video ( 3,453 actual - 2,631 predicted).
+### So we see that the new Stage 1 predicts 802 fewer commercial sentences than actually are in the 722 minutes of video ( 3,453 actual - 2,631 predicted).
 
-#### Another and better baseline stat is the confusion matrix from stage 1. The metrics from this baseline test dataset will be used to compare to stage 2 results. 
+### Another and better baseline stat is the confusion matrix from stage 1. The metrics from this baseline test dataset will be used to compare to stage 2 results. 
 
 ![cm_stage1_0_old.png](images/cm_stage1_0_old.png)
 
@@ -267,13 +267,15 @@ Examples are: exponential decay feature, length of sentence, square and square r
 
 **With most optimal feature set defined, now tune the model using Grid Search CV**
 
-*Note: I used a special time series split function in cross validation to avoid data leakage*
+*Note: I used a time series split CV function in cross validation to avoid data leakage*
 
 ![overfit_check.png](images/overfit_check.png)
 
 ### Grid Search helped us find parameters that optimize for validation sets. 
-### Charts show F1 for a range of values of a given parameter (while keeping other parameters to their best fit value). 
-### From charts, we see that we are NOT overfitting because Grid Search CV chose highest point of validation curve  near the point of divergence from training curve
+
+**Charts show F1 for a range of values of a given parameter (while keeping other parameters to their best fit value).**
+
+**From charts, we see that we are NOT overfitting because Grid Search CV chose highest point of validation curve  near the point of divergence from training curve**
 
 **At these parameters, we can see the most important features of the 10 we selected:**
 
