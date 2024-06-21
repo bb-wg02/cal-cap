@@ -304,7 +304,7 @@ In github repository, see the notebook Modelue24.CapstoneEvaluation-BradBrown.ip
 *(Note: In addition to the Cal Capstone repo, I can provide Github source code access to the previously completed Stanford Research Project upon request, but to review the code, you can unzip a copy of the Stanford project source code in this cal capstone github - see the 'prev_research' folder)*
 
 ##### Note to grading team:
-##### This cal-cap Github is self-contained in terms of code, but I have included zip files of the original code for the Stanford project and my improvements to make Stage 1 sentence-based (See prev_research folder).
+##### This cal-cap Github is self-contained in terms of code, but I have included zip files of the original code for the Stanford project and my improvements to make Stage 1 sentence-based (See prev_research folder).  The decryption password i will send via the support message
 ##### I believe these code zips are above and beyond the required scope of the Cal Capstone grading rubrick. I do not plan to make these githubs public.
 ##### But if you feel the cal-cap github is incomplete because its data relies on code from these other githubs, I can open it up to specific graders. Thank you!
 
