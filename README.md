@@ -4,6 +4,7 @@ _By Brad Brown_
 
 # Executive summary
 *(Note: Instructions to run the project's ipython notebooks are at the end of this README file)*
+
 ## Goal
 Using my previous research project and paper (["Helping an LLM improve its detection of TV Commercials in Sports Broadcasts"](https://bb-wg02.github.io/cal-cap/scope/CS229_Stanford_Poster_-_Brad_Brown.pdf)) as a starting point, can I improve on my initial research to achieve higher accuracy and more granular **detection of commercials within a television sports broadcast?** 
 
@@ -297,7 +298,7 @@ In github repository, see the notebook Modelue24.CapstoneEvaluation-BradBrown.ip
 
 ## More information 
 
-### This notebook, related code and images are hosted on github [here](https://github.com/bb-wg02/cal-cap)
+### This readme file, related notebook code and images are hosted on github [here](https://github.com/bb-wg02/cal-cap)
 ### If you have python 3.xx installed, you can clone the repo to your local drive to try it out. You can run in multiple models. See the "Notebook Configuration" section.
 
 *(Note: In addition to the Cal Capstone repo, I can provide Github source code access to the previously completed Stanford Research Project upon request, but to review the code, you can unzip a copy of the Stanford project source code in this cal capstone github - see the 'prev_research' folder)*
@@ -353,6 +354,8 @@ cal-cap
 |    ├── CS229_Stanford_Poster_-_Brad_Brown.pdf
         (optional reading)
 </pre>
+
+### Go to the main notebook: [Module24.CapstoneEvaluation-BradBrown.ipynb](Module24.CapstoneEvaluation-BradBrown.ipynb)
 
 ### Contact and Further Information
 
