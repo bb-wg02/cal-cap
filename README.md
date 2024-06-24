@@ -186,7 +186,7 @@ It also holds the statistics about the text block that we use to try to improve 
 - sports_broadcasting_streak - number of sports broadcast sentences seen in a row (including the given sentence of this row)
 - commercial_streak - number of commercials sentences seen in a row (including the given sentence of this row)
 
-### See the notebook [insert link] for a deeper dive into the data tables and data model and how the data was generated.
+### See the notebook [Module24.CapstoneEvaluation-BradBrown.ipynb](Module24.CapstoneEvaluation-BradBrown.ipynb) for a deeper dive into the data tables and data model and how the data was generated.
 
 ### Let's look  at the actual number of sentences that are commercials in our full data set and how frequently STAGE 1 predicts commercials.
 
